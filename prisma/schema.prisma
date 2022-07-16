@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  email       String
+  password    String
+  sessions    Session[]
+  credencials Credencial[]
+  notes       Note[]
+  cards       Card[]
+  wifis       Wifi[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("sessions")
+}
+
+model Credencial {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @map("user_id")
+  user     User   @relation(fields: [userId], references: [id])
+  label    String @unique
+  url      String
+  username String
+  password String
+
+  @@map("credencials")
+}
+
+model Note {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @map("user_id")
+  user    User   @relation(fields: [userId], references: [id])
+  label   String @unique
+  content String
+
+  @@map("notes")
+}
+
+model Card {
+  id         Int     @id @default(autoincrement())
+  userId     Int     @map("user_id")
+  user       User    @relation(fields: [userId], references: [id])
+  label      String  @unique
+  cardNumber String  @unique @map("card_number")
+  cardHolder String  @map("card_holder")
+  expiryDate String  @map("expiry_date")
+  cvv        String
+  pin        String
+  isVirtual  Boolean @map("is_virtual")
+  type       String
+
+  @@map("cards")
+}
+
+model Wifi {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @map("user_id")
+  user     User   @relation(fields: [userId], references: [id])
+  label    String
+  ssid     String
+  password String
+
+  @@map("wifis")
+}
