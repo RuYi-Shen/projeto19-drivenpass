@@ -37,11 +37,12 @@ model Credential {
   id       Int    @id @default(autoincrement())
   userId   Int    @map("user_id")
   user     User   @relation(fields: [userId], references: [id])
-  label    String @unique
+  label    String
   url      String
   username String
   password String
 
+  @@unique([userId, label])
   @@map("credentials")
 }
 
@@ -49,9 +50,10 @@ model Note {
   id      Int    @id @default(autoincrement())
   userId  Int    @map("user_id")
   user    User   @relation(fields: [userId], references: [id])
-  label   String @unique
+  label   String
   content String
 
+  @@unique([userId, label])
   @@map("notes")
 }
 
@@ -59,7 +61,7 @@ model Card {
   id         Int     @id @default(autoincrement())
   userId     Int     @map("user_id")
   user       User    @relation(fields: [userId], references: [id])
-  label      String  @unique
+  label      String
   cardNumber String  @unique @map("card_number")
   cardHolder String  @map("card_holder")
   expiryDate String  @map("expiry_date")
@@ -68,6 +70,7 @@ model Card {
   isVirtual  Boolean @map("is_virtual")
   type       String
 
+  @@unique([userId, label])
   @@map("cards")
 }
 

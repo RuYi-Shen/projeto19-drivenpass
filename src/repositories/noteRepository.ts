@@ -1,14 +1,14 @@
 import client from "../database.js";
-import { Credential } from "@prisma/client";
+import { Note } from "@prisma/client";
 
-export async function create(credentialInfo: Credential) {
-  return await client.credential.create({
-    data: credentialInfo,
+export async function create(noteInfo: Note) {
+  return await client.note.create({
+    data: noteInfo,
   });
 }
 
 export async function findByLabel(label: string) {
-  return await client.credential.findMany({
+  return await client.note.findMany({
     where: {
       label,
     },
@@ -16,7 +16,7 @@ export async function findByLabel(label: string) {
 }
 
 export async function findByUserId(userId: number) {
-  return await client.credential.findMany({
+  return await client.note.findMany({
     where: {
       userId,
     },
@@ -24,7 +24,7 @@ export async function findByUserId(userId: number) {
 }
 
 export async function findById(id: number) {
-  return await client.credential.findUnique({
+  return await client.note.findUnique({
     where: {
       id,
     },
@@ -32,7 +32,7 @@ export async function findById(id: number) {
 }
 
 export async function deleteById(id: number) {
-  return await client.credential.delete({
+  return await client.note.delete({
     where: {
       id,
     },

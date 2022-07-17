@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import * as userRepository from "../repositories/userRepository.js";
-import * as credentialRepository from "../repositories/credentialRepository.js";
 
 export function validateSchema(schema: any) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +25,7 @@ export async function validateToken(
   if (!token) {
     return res.sendStatus(401);
   }
-  const { userId } : any = jwt.verify(token, process.env.SECRET_KEY || "secret");
+  const { userId }: any = jwt.verify(token, process.env.SECRET_KEY || "secret");
   if (!userId) {
     return res.sendStatus(401);
   }
@@ -41,12 +40,14 @@ export async function validateToken(
 export function validateLabel(repository: any) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const { label } = req.body;
-    const labelExists = await repository.findByLabel(label);
-    if (labelExists) {
-      return res.status(422).send("Label already in use");
-    }
+    const labelFromDb = await repository.findByLabel(label);
+    labelFromDb.map((label: { userId: number }) => {
+      if (label.userId === res.locals.user.id) {
+        return res.status(409).send("Label already in use");
+      }
+    });
     next();
-  }
+  };
 }
 
 export function validateId(repository: any) {
@@ -56,9 +57,9 @@ export function validateId(repository: any) {
     if (!data) {
       return res.sendStatus(404);
     }
-    if(data.userId !== res.locals.user.id) {
+    if (data.userId !== res.locals.user.id) {
       return res.sendStatus(401);
     }
     next();
-  }
+  };
 }
