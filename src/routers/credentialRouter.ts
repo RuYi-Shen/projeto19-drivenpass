@@ -7,7 +7,7 @@ import * as credentialRepository from "../repositories/credentialRepository.js";
 const credentialRouter = Router();
 credentialRouter.post("", validateSchema(createCredentialInfo), validateToken, validateLabel(credentialRepository) , createCredential);
 credentialRouter.get("", validateToken, findCredentials);
-credentialRouter.get("/:id", validateToken, validateId, findCredential);
-credentialRouter.delete("/:id", validateToken, validateId, deleteCredential);
+credentialRouter.get("/:id", validateToken, validateId(credentialRepository), findCredential);
+credentialRouter.delete("/:id", validateToken, validateId(credentialRepository), deleteCredential);
 
 export default credentialRouter;
