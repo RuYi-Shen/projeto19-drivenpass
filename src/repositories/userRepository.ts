@@ -1,6 +1,14 @@
 import client from "../database.js";
 import { User } from "@prisma/client";
 
+export async function findById(id: number) {
+  return await client.user.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export async function findByEmail(email: string) {
   return await client.user.findUnique({
     where: {

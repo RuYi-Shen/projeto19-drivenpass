@@ -15,7 +15,7 @@ model User {
   email       String       @unique
   password    String
   sessions    Session[]
-  credencials Credencial[]
+  credentials Credential[]
   notes       Note[]
   cards       Card[]
   wifis       Wifi[]
@@ -33,7 +33,7 @@ model Session {
   @@map("sessions")
 }
 
-model Credencial {
+model Credential {
   id       Int    @id @default(autoincrement())
   userId   Int    @map("user_id")
   user     User   @relation(fields: [userId], references: [id])
@@ -42,7 +42,7 @@ model Credencial {
   username String
   password String
 
-  @@map("credencials")
+  @@map("credentials")
 }
 
 model Note {
