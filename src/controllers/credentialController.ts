@@ -11,12 +11,6 @@ export async function createCredential(req: Request, res: Response) {
 export async function findCredential(req: Request, res: Response) {
   const { id } = req.params;
   const credential = await credentialService.findCredential(+id);
-  if (!credential) {
-    return res.sendStatus(404);
-  }
-  if(credential.userId !== res.locals.user.id) {
-    return res.sendStatus(401);
-  }
   res.json(credential);
 }
 
@@ -28,13 +22,6 @@ export async function findCredentials(req: Request, res: Response) {
 
 export async function deleteCredential(req: Request, res: Response) {
   const { id } = req.params;
-  const credential = await credentialService.findCredential(+id);
-  if (!credential) {
-    return res.sendStatus(404);
-  }
-  if(credential.userId !== res.locals.user.id) {
-    return res.sendStatus(401);
-  }
   await credentialService.deleteCredential(+id);
   res.sendStatus(204);
 }
